@@ -8,9 +8,7 @@ class MyGame:
                 self.old_ = int(scFile.read())
         except:
             self.old_ = 300
-##        self.scFile_ = open('E:\\MINH\\GitRepo\\NumGuess\\NumGuess_Score.txt')
-##        self.old_ = int(open('E:\\MINH\\GitRepo\\NumGuess\\NumGuess_Score.txt').read()
-        
+                    
         self.number_ = random.randint(0, 100)
         self.in_game_ = False
         self.spaces_ = (100 * ' ')
