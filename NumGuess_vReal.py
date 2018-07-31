@@ -11,6 +11,10 @@ class MyGame:
         self.white_ = '#ffffff'
         self.green_ = '#008800'
         self.score_ = 0
+        self.t1_ = None
+        self.t2_ = None
+        self.duration_ = None
+        self.is_highscore_ = False
 
     def intro(self, title, window_size, version):
         tk_intro = Tk()
@@ -66,6 +70,7 @@ class MyGame:
         guess = StringVar()
         user_guess = Entry(tk_play, textvariable=guess, width=30, bg=self.white_)
         user_guess.place(x=325, y=85)
+        self.t1_ = int(time.time())
 
         def check(event):
             try:
@@ -79,10 +84,34 @@ class MyGame:
                     self.number_ = random.randint(0, 100)
                     user_guess.delete(0, 'end')
                     
-                    if self.score_ == 5:
-                        hint = Label(tk_play, text='You win!' + self.spaces_,
-                                 font=self.my_font_, fg=self.black_).place(x=10, y=60)
-                        tk_play.update()
+                    if self.score_ == 1:
+                        self.t2_ = int(time.time())
+                        self.duration_ = (self.t2_ - self.t1_)
+                        
+                        if self.duration_ in range(0, 26):
+                            hint = Label(tk_play, text=('You won in an amazing %s seconds!! You\'re awesome!' % self.duration_) + self.spaces_,
+                                     font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                            tk_play.update()
+
+                        elif self.duration_ in range(26, 41):
+                            hint = Label(tk_play, text=('You won in just %s seconds!' % self.duration_) + self.spaces_,
+                                     font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                            tk_play.update()
+                        
+                        elif self.duration_ in range(41, 66):
+                            hint = Label(tk_play, text=('You won in %s seconds!' % self.duration_) + self.spaces_,
+                                     font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                            tk_play.update()
+
+                        elif self.duration_ in range(66, 101):
+                            hint = Label(tk_play, text=('It took you %s seconds. Keep trying!' % self.duration_) + self.spaces_,
+                                     font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                            tk_play.update()
+
+                        elif self.duration_ < 100:
+                            hint = Label(tk_play, text=('It took you %s seconds. You need to get better.' % self.duration_) + self.spaces_,
+                                     font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                            tk_play.update()
                         
                         time.sleep(3)
                         tk_play.destroy()
@@ -109,5 +138,5 @@ class MyGame:
 
 g = MyGame()
 
-g.intro('Million Dollar App', '525x200', 'v0.7')
+g.intro('NumGuess v1.1', '525x200', 'v1.1')
 g.play('Million Dollar App', '525x200')
