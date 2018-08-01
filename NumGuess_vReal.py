@@ -56,7 +56,8 @@ class MyGame:
         
         tk_intro.update()
 
-        start_ = Button(tk_intro, text='Play', font=self.my_font_, fg=self.white_, bg=self.green_, command=start).place(x=230, y=165)
+        start_ = Button(tk_intro, text='Play', font=self.my_font_,
+                        fg=self.white_, bg=self.green_, command=start).place(x=230, y=165)
 
 
         tk_intro.mainloop()
@@ -125,30 +126,34 @@ class MyGame:
                         player_won('You won in %s seconds!')
 
                     elif self.duration_ in range(66, 101):
-                        player_won('It took you %s seconds. Keep trying!')
+                        player_won('It took you %s seconds to win. Keep trying!')
 
                     elif self.duration_ < 100:
-                        player_won('It took you %s seconds. You need to get better.')
+                        player_won('It took you %s whole seconds to win! Get better.')
                     
                     time.sleep(3)
                     tk_play.destroy()
                     
             elif converted_guess < self.number_:
-                hint = Label(tk_play, text='Guess higher' + self.spaces_,
+                hint = Label(tk_play, text='Guess higher!' + self.spaces_,
                              font=self.my_font_, fg=self.black_).place(x=10, y=60)
                 
                 user_guess.delete(0, 'end')
                 
             elif converted_guess > self.number_:
-                hint = Label(tk_play, text='Guess lower' + self.spaces_,
+                hint = Label(tk_play, text='Guess lower!' + self.spaces_,
                              font=self.my_font_, fg=self.black_).place(x=10, y=60)
                 
                 user_guess.delete(0, 'end')
 
+            if converted_guess in range((self.number_ - 2), (self.number_ + 2)):
+                hint = Label(tk_play, text='You\'re very close!' + self.spaces_,
+                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+
         user_guess.bind_all('<KeyPress-Return>', check)
         tk_play.mainloop()
 
-g = MyGame()
+game = MyGame()
 
-g.intro('Welcome to NumGuess', '525x200', 'v2.0')
-g.play('Million Dollar App', '525x200')
+game.intro('Welcome to NumGuess', '525x200', 'v2.2')
+game.play('Minh\'s Awesome App', '525x200')
