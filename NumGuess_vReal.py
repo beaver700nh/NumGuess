@@ -17,6 +17,8 @@ class MyGame:
         self.white_ = '#ffffff'
         self.green_ = '#008800'
         self.red_ = '#ff0000'
+        self.blue_ = '#0000ff'
+        self.orange_ = '#ffa500'
         self.score_ = 0
         self.t1_ = None
         self.t2_ = None
@@ -52,22 +54,22 @@ class MyGame:
             tk_intro.destroy()
 
         intro_line_1 = Label(tk_intro, text='Hello user!' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=10)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=10)
         
         intro_line_2 = Label(tk_intro, text='Welcome to the million dollar app,' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=35)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=35)
         
         intro_line_3 = Label(tk_intro, text=('NumGuess %s by Minh Le!' % version) + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=60)
         
         intro_line_4 = Label(tk_intro, text='Try to guess a number between 1 and 100' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=85)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=85)
         
         intro_line_5 = Label(tk_intro, text='correctly 5 times as quickly' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=110)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=110)
         
         intro_line_6 = Label(tk_intro, text='as possible. Good luck and enjoy!' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=135)
+                             font=self.my_font_, fg=self.blue_).place(x=10, y=135)
         
         tk_intro.update()
 
@@ -98,7 +100,7 @@ class MyGame:
             tk_play.destroy()
 
         play_text = Label(tk_play, text='Guess a number between 1 and 100:' + self.spaces_,
-                          font=self.my_font_, fg=self.black_).place(x=10, y=85)
+                          font=self.my_font_, fg=self.green_).place(x=10, y=85)
 
         guess = StringVar()
         user_guess = Entry(tk_play, textvariable=guess, width=30, bg=self.white_)
@@ -109,13 +111,13 @@ class MyGame:
         def check(event):
             def player_won(text):
                 hint = Label(tk_play, text=(text % self.duration_) + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.green_).place(x=10, y=60)
                 if self.highscore_ == True:
                     self.scNew_ = open('E:\\MINH\\GitRepo\\NumGuess\\NumGuess_Score.txt', 'w')
                     self.scNew_.write(str(self.duration_))
                     self.scNew_.close()
                     hint = Label(tk_play, text=('That\'s a new highscore!') + self.spaces_,
-                         font=self.my_font_, fg=self.black_).place(x=10, y=110)
+                         font=self.my_font_, fg=self.orange_).place(x=10, y=110)
                 tk_play.update()
                 
             user_guess.after_cancel(self.timer_)
@@ -126,14 +128,14 @@ class MyGame:
             
             except ValueError:
                 hint = Label(tk_play, text='Guess a NUMBER.' + self.spaces_,
-                                 font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                                 font=self.my_font_, fg=self.red_).place(x=10, y=60)
                 
                 user_guess.delete(0, 'end')
                 
             if converted_guess == self.number_:
                 self.score_ += 1
                 hint = Label(tk_play, text=('You guessed right! Your score is now %s!' % self.score_) + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.orange_).place(x=10, y=60)
                 
                 self.number_ = random.randint(0, 100)
                 user_guess.delete(0, 'end')
@@ -165,24 +167,24 @@ class MyGame:
                     
             elif converted_guess < self.number_:
                 hint = Label(tk_play, text='Guess higher!' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.orange_).place(x=10, y=60)
                 
                 user_guess.delete(0, 'end')
                 
             elif converted_guess > self.number_:
                 hint = Label(tk_play, text='Guess lower!' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.orange_).place(x=10, y=60)
                 
                 user_guess.delete(0, 'end')
 
             if self.score_ != 5 and converted_guess in range((self.number_ - 2), (self.number_ + 2)):
                 hint = Label(tk_play, text='You\'re very close!' + self.spaces_,
-                             font=self.my_font_, fg=self.black_).place(x=10, y=60)
+                             font=self.my_font_, fg=self.orange_).place(x=10, y=60)
 
         user_guess.bind_all('<KeyPress-Return>', check)
         tk_play.mainloop()
 
 game = MyGame()
 
-game.intro('Welcome to NumGuess', '525x200', 'v3.0')
+game.intro('Welcome to NumGuess', '525x200', 'v3.1')
 game.play('NumGuess - (:->)')
