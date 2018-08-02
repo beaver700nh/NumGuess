@@ -109,7 +109,7 @@ class MyGame:
                 self.number_ = random.randint(0, 100)
                 user_guess.delete(0, 'end')
                 
-                if self.score_ == 5:                        
+                if self.score_ == 1:                        
                     self.t2_ = int(time.time())
                     self.duration_ = (self.t2_ - self.t1_)
 
@@ -146,7 +146,7 @@ class MyGame:
                 
                 user_guess.delete(0, 'end')
 
-            if converted_guess in range((self.number_ - 2), (self.number_ + 2)):
+            if self.score_ != 1 and converted_guess in range((self.number_ - 2), (self.number_ + 2)):
                 hint = Label(tk_play, text='You\'re very close!' + self.spaces_,
                              font=self.my_font_, fg=self.black_).place(x=10, y=60)
 
@@ -155,5 +155,5 @@ class MyGame:
 
 game = MyGame()
 
-game.intro('Welcome to NumGuess', '525x200', 'v2.2')
+game.intro('Welcome to NumGuess', '525x200', 'v2.3')
 game.play('Minh\'s Awesome App', '525x200')
