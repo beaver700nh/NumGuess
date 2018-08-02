@@ -16,24 +16,39 @@ class MyGame:
         self.black_ = '#000000'
         self.white_ = '#ffffff'
         self.green_ = '#008800'
+        self.red_ = '#ff0000'
         self.score_ = 0
         self.t1_ = None
         self.t2_ = None
         self.duration_ = None
         self.highscore_ = False
+        self.window_size_ = None
+        self.screen_width_ = None
+        self.screen_height_ = None
+        self.x_coordinate_ = None
+        self.y_coordinate_ = None
+        self.timer_ = None
 
     def intro(self, title, window_size, version):
+        coords = window_size.split('x')
+        
         tk_intro = Tk()
+
+        self.window_size_ = window_size
+        self.screen_width_ = tk_intro.winfo_screenwidth()
+        self.screen_height_ = tk_intro.winfo_screenheight()
+        self.x_coordinate_ = int((self.screen_width_/2) - (int(coords[0])/2))
+        self.y_coordinate_ = int((self.screen_height_/2) - (int(coords[1])/2))
         
         tk_intro.title(title)
-        tk_intro.geometry(window_size)
-        tk_intro.resizable(0, 0)
+        tk_intro.geometry('{}+{}+{}'.format(self.window_size_, self.x_coordinate_, self.y_coordinate_))
+        tk_intro.resizable(False, False)
         tk_intro.wm_attributes('-topmost', 1)
         tk_intro.update()
 
+
         def start():
-            self.tk_x = tk_intro.winfo_x()
-            self.tk_y = tk_intro.winfo_y()
+            self.in_game_ = True
             tk_intro.destroy()
 
         intro_line_1 = Label(tk_intro, text='Hello user!' + self.spaces_,
@@ -62,14 +77,25 @@ class MyGame:
 
         tk_intro.mainloop()
 
-    def play(self, title, window_size):
+    def play(self, title):
+        if not self.in_game_:
+            return
+        
         tk_play = Tk()
 
         tk_play.title(title)
-        tk_play.geometry('{}+{}+{}'.format(window_size, self.tk_x, self.tk_y))
-        tk_play.resizable(0, 0)
+        tk_play.geometry('{}+{}+{}'.format(self.window_size_, self.x_coordinate_, self.y_coordinate_))
+        tk_play.resizable(False, False)
         tk_play.wm_attributes('-topmost', 1)
         tk_play.update()
+
+        def kill(sleep):
+            bye = Label(tk_play, text='Timeout reached, initializing self-destruct...' + self.spaces_,
+                        font=self.my_font_, fg=self.red_).place(x=10, y=60)
+            tk_play.update()
+            
+            time.sleep(sleep)
+            tk_play.destroy()
 
         play_text = Label(tk_play, text='Guess a number between 1 and 100:' + self.spaces_,
                           font=self.my_font_, fg=self.black_).place(x=10, y=85)
@@ -78,6 +104,7 @@ class MyGame:
         user_guess = Entry(tk_play, textvariable=guess, width=30, bg=self.white_)
         user_guess.place(x=325, y=85)
         self.t1_ = int(time.time())
+        self.timer_ = user_guess.after(60000, kill, 3)
 
         def check(event):
             def player_won(text):
@@ -91,7 +118,9 @@ class MyGame:
                          font=self.my_font_, fg=self.black_).place(x=10, y=110)
                 tk_play.update()
                 
-
+            user_guess.after_cancel(self.timer_)
+            user_guess.after(60000, kill, 3)
+            
             try:
                 converted_guess = int(guess.get())
             
@@ -109,7 +138,7 @@ class MyGame:
                 self.number_ = random.randint(0, 100)
                 user_guess.delete(0, 'end')
                 
-                if self.score_ == 1:                        
+                if self.score_ == 5:                        
                     self.t2_ = int(time.time())
                     self.duration_ = (self.t2_ - self.t1_)
 
@@ -146,7 +175,7 @@ class MyGame:
                 
                 user_guess.delete(0, 'end')
 
-            if self.score_ != 1 and converted_guess in range((self.number_ - 2), (self.number_ + 2)):
+            if self.score_ != 5 and converted_guess in range((self.number_ - 2), (self.number_ + 2)):
                 hint = Label(tk_play, text='You\'re very close!' + self.spaces_,
                              font=self.my_font_, fg=self.black_).place(x=10, y=60)
 
@@ -155,5 +184,5 @@ class MyGame:
 
 game = MyGame()
 
-game.intro('Welcome to NumGuess', '525x200', 'v2.3')
-game.play('Minh\'s Awesome App', '525x200')
+game.intro('Welcome to NumGuess', '525x200', 'v3.0')
+game.play('NumGuess - (:->)')
