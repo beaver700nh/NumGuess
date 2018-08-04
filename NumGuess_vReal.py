@@ -85,6 +85,12 @@ class MyGame:
         
         tk_play = Tk()
 
+        def clean_up():
+            user_guess.after_cancel(self.timer_)
+            tk_play.destroy()
+            
+        tk_play.protocol('WM_DELETE_WINDOW', clean_up)
+
         tk_play.title(title)
         tk_play.geometry('{}+{}+{}'.format(self.window_size_, self.x_coordinate_, self.y_coordinate_))
         tk_play.resizable(False, False)
@@ -116,12 +122,12 @@ class MyGame:
                     self.scNew_ = open('E:\\MINH\\GitRepo\\NumGuess\\NumGuess_Score.txt', 'w')
                     self.scNew_.write(str(self.duration_))
                     self.scNew_.close()
-                    hint = Label(tk_play, text=('That\'s a new highscore!') + self.spaces_,
+                    hint = Label(tk_play, text='That\'s a new highscore!' + self.spaces_,
                          font=self.my_font_, fg=self.orange_).place(x=10, y=110)
                 tk_play.update()
                 
             user_guess.after_cancel(self.timer_)
-            user_guess.after(60000, kill, 3)
+            self.timer_ = user_guess.after(60000, kill, 3)
             
             try:
                 converted_guess = int(guess.get())
@@ -186,5 +192,5 @@ class MyGame:
 
 game = MyGame()
 
-game.intro('Welcome to NumGuess', '525x200', 'v3.1')
-game.play('NumGuess - (:->)')
+game.intro('Welcome to NumGuess', '525x200', 'v4.0')
+game.play('NumGuess v4.0')
